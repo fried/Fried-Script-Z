@@ -7,7 +7,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.0'
+zshrcversion='1.1'
 
 #set a good umask
 umask 022
@@ -63,12 +63,17 @@ uname=$(uname); #Pull out the os could be useful
 
 #Set Some easy to see colors
 export LS_COLORS='no=00:fi=00:di=00;36:ln=00;35:pi=01;34:do=01;34:bd=01;33:cd=00;33:or=01;35:so=01;34:su=00;31:sg=01;31:tw=01;37:ow=00;33:st=01;37:ex=00;32:mi=01;35:'
-ZLS_COLORS=$LS_COLORS #ZSH Colors should match ls colors
 
 #Set some zsh completion Options
+autoload -U compinit
+compinit -C
 zmodload -i zsh/complist
 fignore='.o' #Ignore .o files in filename completiong
 setopt NO_ALWAYS_LAST_PROMPT #Print a new prompt after a list completion. 
+#Case-Insensitive (all)
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+#Color File Completion
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 
 
 HISTFILE=$HOME/.zhistory
 HISTSIZE=1000
