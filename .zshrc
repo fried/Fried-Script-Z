@@ -63,8 +63,10 @@ uname=$(uname); #Pull out the os could be useful
 
 #Set Some easy to see colors
 export LS_COLORS='no=00:fi=00:di=00;36:ln=00;35:pi=01;34:do=01;34:bd=01;33:cd=00;33:or=01;35:so=01;34:su=00;31:sg=01;31:tw=01;37:ow=00;33:st=01;37:ex=00;32:mi=01;35:'
-ZLS_COLORS=$LS_COLORS
-#Set some zsh options
+ZLS_COLORS=$LS_COLORS #ZSH Colors should match ls colors
+
+#Set some zsh completion Options
+zmodload -i zsh/complist
 fignore='.o' #Ignore .o files in filename completiong
 
 HISTFILE=$HOME/.zhistory
@@ -151,9 +153,23 @@ chpwd () {
 }
 chpwd #Set it 
 
+#OS Based Alias and Settings
+case "$uname" in
+    Darwin)
+	alias ls='ls -GFCa'
+	export LSCOLORS=gxfxExExcxDxdxbxBxhxdx #bsd & darwin
+	export CLICOLOR
+        ;;
+    Linux)
+        alias ls='ls --color=auto -FhCa'
+        ;;
+    *)
+        ;;
+esac
+
+
 #Useful Aliases
 alias version='echo "Fried Script Z $zshrcversion"'
-alias ls='ls --color=auto -FhCa'
 #Be Safe :)
 alias rm='rm -i'
 alias mv='mv -i'
