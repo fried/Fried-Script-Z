@@ -209,7 +209,7 @@ getzshrc () {
 
 
 #Useful Aliases
-alias depth='echo You are currently at a shell depth of ${SHLVL}"'
+alias depth='echo "You are currently at a shell depth of ${SHLVL}"'
 alias version='echo "Fried Script Z $zshrcversion"'
 #Be Safe :)
 alias rm='rm -i'
