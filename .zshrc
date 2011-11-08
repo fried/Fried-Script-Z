@@ -7,7 +7,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.0-beta'
+zshrcversion='1.0'
 
 #set a good umask
 umask 022
@@ -16,7 +16,7 @@ umask 022
 [[ -z "$prompt" ]] && return
 
 #clean the env 
-unalias -m "*" #Do not force alias on my buddy
+unalias -m "*" #Do not force alias on me buddy
 
 #Make sure this alias gets created, before any scripting errors can possibly prevent it.
 alias reload='source ~/.zshrc'
@@ -68,6 +68,7 @@ ZLS_COLORS=$LS_COLORS #ZSH Colors should match ls colors
 #Set some zsh completion Options
 zmodload -i zsh/complist
 fignore='.o' #Ignore .o files in filename completiong
+setopt NO_ALWAYS_LAST_PROMPT #Print a new prompt after a list completion. 
 
 HISTFILE=$HOME/.zhistory
 HISTSIZE=1000
@@ -155,20 +156,55 @@ chpwd #Set it
 
 #OS Based Alias and Settings
 case "$uname" in
+    (Darwin|FreeBSD)
+   	export LSCOLORS=gxfxExExcxDxdxbxBxhxdx #bsd & darwin
+        export CLICOLOR
+	;& #Fall Through for more matches :)
     Darwin)
-	alias ls='ls -GFCa'
-	export LSCOLORS=gxfxExExcxDxdxbxBxhxdx #bsd & darwin
-	export CLICOLOR
+	alias ls='ls -GFCah'
+	gettool=(curl -O) #Arguments Passed
         ;;
     Linux)
         alias ls='ls --color=auto -FhCa'
+        gettool=(wget -q)
+        ;;
+    FreeBSD)
+        alias ls='ls -FCGogah'
+	gettool='fetch'
         ;;
     *)
+	gettool='NONE'
         ;;
 esac
 
+#Get New Versions of this script
+#Safer updates
+getzshrc () {
+   branch=${1=stable} #Allow the picking of a branch :) 
+   if [[ $gettool != "NONE" ]]; then
+	setopt NO_PUSHD_IGNORE_DUPS #Suppress error if we start out in home
+	pushd ~ #Move to home dir
+        mv -f .zshrc .zshrc.old #Save the old one
+        echo "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc"
+        if (( $gettool "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc" )); then
+	    echo "Use 'zshcompare' to review changes (RECOMENDED)"
+            alias zshcompare='diff -cdB .zshrc .zshrc.old | less'
+	    echo "Use 'reload' to use these settings now"
+            echo "Use 'revert' to use old version"
+            alias revert='mv -f ~/.zshrc.old ~/.zshrc&&unalias revert'
+ 	    popd #go back to what we were doing
+	else
+	    mv -f .zshrc.old .zshrc #Restore the old, we failed
+	fi
+	setopt PUSHD_IGNORE_DUPS #Restore behavior 
+   else
+	echo "Disabled, lacking a file fetch utility for your OS"
+   fi
+}
+
 
 #Useful Aliases
+alias depth='echo You are currently at a shell depth of ${SHLVL}"'
 alias version='echo "Fried Script Z $zshrcversion"'
 #Be Safe :)
 alias rm='rm -i'
@@ -189,14 +225,30 @@ fi
 alias ssh='ssh -A'
 alias sshkeys='ssh-add -l'
 
-#Sed meet ped
-alias ped='perl -i.bak -npe'
+if [[ -n $(which less) ]]; then 
+   alias more='less' #Yes less is more
+fi
+
+#Perl to the rescue
+if [[ -n $(which perl) ]]; then
+   alias ped='perl -i.bak -npe' #Why sed when you can ped
+   if (( perl -e "use LWP::Simple" &> /dev/null )); then
+	alias phttpcat='perl -MLWP::Simple -e "exit is_error getprint shift"'
+	pwget () {
+	    phttpcat $1 > $(basename $1)    
+	}
+        if [[ $gettool == "NONE" ]]; then
+	    gettool='pwget' #Perl to save the day
+	fi
+   fi   
+fi
+
 alias become 'sudo -s -H -u'
 if [[ $EDITOR == "vim" ]]; then
   alias vim='vim -N'
   alias vi='vim'
 fi
 alias cls='clear'
-
+alias stack='dirs -l'
 #Load local configurations
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
