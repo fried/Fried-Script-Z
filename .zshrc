@@ -116,8 +116,8 @@ bindkey "^[[D" backward-char
 bindkey "^[[C" forward-char
 bindkey "^[[A" up-history
 bindkey "^[[B" down-history
-bindkey "^[[5~" vi-word-back
-bindkey "^[[6~" vi-word-fwd
+#bindkey "^[[5~" vi-word-back
+#bindkey "^[[6~" vi-word-fwd
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
 if [[ $uname == "Darwin" ]]; then
