@@ -7,7 +7,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.1.0'
+zshrcversion='1.1.0a'
 
 #set a good umask
 umask 022
@@ -193,7 +193,7 @@ getzshrc () {
         echo "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc"
         if (( $gettool "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc" )); then
 	    echo "Use 'zshcompare' to review changes (RECOMENDED)"
-            alias zshcompare='diff -cdB .zshrc .zshrc.old | less'
+            alias zshcompare='diff -udB .zshrc.old .zshrc | less'
 	    echo "Use 'reload' to use these settings now"
             echo "Use 'revert' to use old version"
             alias revert='mv -f ~/.zshrc.old ~/.zshrc&&unalias revert'
