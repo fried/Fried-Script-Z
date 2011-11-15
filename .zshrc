@@ -7,7 +7,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.1'
+zshrcversion='1.1.0'
 
 #set a good umask
 umask 022
@@ -250,7 +250,6 @@ fi
 
 alias become 'sudo -s -H -u'
 if [[ $EDITOR == "vim" ]]; then
-  alias vim='vim -N'
   alias vi='vim'
 fi
 alias cls='clear'
