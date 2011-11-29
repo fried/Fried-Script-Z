@@ -67,6 +67,8 @@ export LS_COLORS='no=00:fi=00:di=00;36:ln=00;35:pi=01;34:do=01;34:bd=01;33:cd=00
 #Set some zsh completion Options
 autoload -U compinit
 compinit -C
+#Complete my dot files please
+_comp_options+=(globdots)
 zmodload -i zsh/complist
 fignore='.o' #Ignore .o files in filename completiong
 setopt NO_ALWAYS_LAST_PROMPT #Print a new prompt after a list completion. 
