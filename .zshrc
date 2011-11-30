@@ -132,7 +132,14 @@ else
    echo "Fried Script - Current Shell Depth ${SHLVL}"
 fi
 #Set a colorful prompt that identifies the user and current host. 
-prompt=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%{\e[31m%}:%{\e[32m%}%/%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '
+PROMPT=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%{\e[31m%}:%{\e[32m%}%/%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '
+RPROMPT=
+
+altprompt () {
+  echo "Reload to undo. Enjoy"
+  PROMPT=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '
+  RPROMPT+=$'%{\e[0;1;34m%}[%{\e[32m%}%/%{\e[34m%}]%{\e[0m%}'  
+}
 
 #Change the title on directory changes
 set_xterm_title () {
