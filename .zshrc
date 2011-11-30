@@ -113,22 +113,15 @@ bindkey "^H" backward-delete-char
 bindkey "^?" backward-delete-char
 bindkey "\177" backward-delete-char
 bindkey "^[[1~" beginning-of-line
-bindkey "^[[4~" end-of-line
 bindkey "^[[D" backward-char
 bindkey "^[[C" forward-char
 bindkey "^[[A" up-history
 bindkey "^[[B" down-history
-#bindkey "^[[5~" vi-word-back
-#bindkey "^[[6~" vi-word-fwd
-bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
-if [[ $uname == "Darwin" ]]; then
-   bindkey "^[[5~" history-search-backward
-   bindkey "^[[6~" history-search-forward
-   bindkey "^[[H" beginning-of-line
-   bindkey "^[[1~" beginning-of-line
-   bindkey "^[[F" end-of-line
-fi
+bindkey "^[[5~" history-search-backward
+bindkey "^[[6~" history-search-forward
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
 
 echo $(command date '+%a %h %d %r %Z %Y')
 echo "Interactive \e[0;1;34mLogin\e[0m, Fried Script Z $zshrcversion."
