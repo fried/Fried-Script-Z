@@ -1,0 +1,54 @@
+#Pull out git info
+function get_git_info {
+    #Try to get a git status
+    gitstatus=$(/usr/bin/git branch --no-color 2> /dev/null)
+    if [ -n "$gitstatus" ]; then
+        branch=$(echo "$gitstatus" | sed -e '/^[^*]/d' -e 's/^* //')
+        echo "%{\e[0;1;34m%}<(%{\e[33m%}$branch%{\e[34m%})>%{\e[0m%}"
+        unset gitstatus
+        unset branch
+    fi
+}
+
+#Execute some pre-commands
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
+#Allow substituions in the prompt
+setopt prompt_subst
+
+#Info cache
+export __CURRENT_GIT_INFO=
+export _GIT_PROMPT_UPDATE=1 #Try Update on reload
+
+#On exec of git commands update the git info
+preexec_functions+='zsh_preexec_update_git_vars'
+zsh_preexec_update_git_vars() {
+    case "$(history $HISTCMD)" in
+        *git*)
+            _GIT_PROMPT_UPDATE=1
+        ;;
+     esac
+}
+
+#On cd update the git info
+chpwd_functions+='zsh_chpwd_update_git_vars'
+zsh_chpwd_update_git_vars() {
+    _GIT_PROMPT_UPDATE=1
+}
+
+precmd_functions+='zsh_precmd_git_prompt'
+zsh_precmd_git_prompt() {
+    if [[ -n "$_GIT_PROMPT_UPDATE" ]]; then
+        __CURRENT_GIT_INFO=$(get_git_info)
+        _GIT_PROMPT_UPDATE=
+    fi
+}
+
+get_git_prompt_cache() {
+    echo $__CURRENT_GIT_INFO
+}
+
+#Remember escape color codes with %{ %} otherwise prompt does not format correctly
+RPROMPT='$(get_git_prompt_cache)'
