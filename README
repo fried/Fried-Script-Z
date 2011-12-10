@@ -3,3 +3,4 @@ Fried Script Z .zshrc
 .zshrc - The Main ZSH Config file
 .zshrc.git - Optional Git Branch in Right Prompt
 .zshrc.shortpwd - Shorten Long PWD's by including ,.. in the middle of them.
+.zshrc.tmux - Examples of loading tmux, and fixing your SSH agent in tmux

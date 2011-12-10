@@ -1,13 +1,15 @@
 ################################################################################
 # Fried Script Z by Jason Fried <zshrc[at]jasonfried.info>    Standard Distro  #
 # INFO availible at http://jasonfried.info/friedscript/                        #
+# Copyright (c) 2011, Jason Fried.   Simplified BSD License                    #
+# License Statement: http://jasonfried.info/friedscript/license.html           #
 ################################################################################
-# !!!DO NOT MAKE CHANGES TO THIS FILE THEY WILL BE LOST AFTER A 'getupdate'!!! #
+# !!!DO NOT MAKE CHANGES TO THIS FILE THEY WILL BE LOST AFTER A 'getzshrc'!!!  #
 #        !!! Make ANY CHANGES YOU WISH TO KEEP IN '.zshrc.local' !!!           #
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.1.0a'
+zshrcversion='1.1.1'
 
 #set a good umask
 umask 022
