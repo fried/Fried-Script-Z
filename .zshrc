@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.1.1'
+zshrcversion='1.1.1a'
 
 #set a good umask
 umask 022
@@ -134,7 +134,7 @@ bindkey ' ' magic-space #On space expand history vars
 
 echo $(command date '+%a %h %d %r %Z %Y')
 echo "Interactive \e[0;1;34mLogin\e[0m, Fried Script Z $zshrcversion."
-if [[ $SHLVL -eq 1 ]]; then #Only post this in the top most shell
+if [[ $SHLVL -eq 1 || ( -n $TMUX && $SHLVL -eq 2 ) ]]; then #Only post this in the top most shell
    echo "Terminal type set to \e[1;33m$TERM\e[0m on $TTY."
    echo "Using \e[31mzsh\e[0m as shell with \e[31m$uname\e[0m instructions."
 else
