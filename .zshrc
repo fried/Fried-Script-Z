@@ -90,6 +90,7 @@ setopt HIST_VERIFY #Safer history expantion :)
 #LOGCHECK=10
 #watch=all
 
+setopt ALWAYS_TO_END
 setopt CHASE_DOTS
 setopt CHASE_LINKS
 setopt PUSHD_IGNORE_DUPS
@@ -115,13 +116,19 @@ bindkey "\177" backward-delete-char
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[D" backward-char
 bindkey "^[[C" forward-char
-bindkey "^[[A" up-history
-bindkey "^[[B" down-history
+#bindkey "^[[A" up-history
+#bindkey "^[[B" down-history
 bindkey "^[[4~" end-of-line
 bindkey "^[[5~" history-search-backward
 bindkey "^[[6~" history-search-forward
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
+
+#Remap Keys for up an down to history search back and forward
+#This is an attempt to make history searching better with C-r or !word [tab]
+bindkey "^[[A" history-search-backward
+bindkey "^[[B" history-search-forward
+bindkey ' ' magic-space #On space expand history vars
 
 echo $(command date '+%a %h %d %r %Z %Y')
 echo "Interactive \e[0;1;34mLogin\e[0m, Fried Script Z $zshrcversion."
