@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.1.1a'
+zshrcversion='1.1.1b'
 
 #set a good umask
 umask 022
@@ -33,7 +33,7 @@ fi
 
 #Build the path, if the path exists
 dpath=()
-foreach dir ( $path /sbin /usr/sbin /usr/local/sbin /bin /usr/bin /usr/local/bin /usr/games /usr/X11R6/bin /usr/kerberos/bin /opt/local/bin /opt/local/sbin  ~/ ~/bin ~/tools ./ )
+foreach dir ( $path /sbin /usr/sbin /usr/local/sbin /bin /usr/bin /usr/local/bin /usr/games /usr/X11R6/bin /usr/kerberos/bin /opt/local/bin /opt/local/sbin  ~/ ~/bin ~/tools )
    if [[ -d $dir ]]; then
       dpath+=$dir
    fi

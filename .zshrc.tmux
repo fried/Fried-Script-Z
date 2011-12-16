@@ -18,12 +18,16 @@ if [[ -z $TMUX ]]; then
    exec tmux -2 attach-session -t fried
 fi
 
+
+typeset -ga preexec_functions 
+
 #This is a nifty way to get enviroment varibles from your connecting session in a tmux session
 #Like SSH agent or kerberos cache
 if [[ -n $TMUX ]]; then
     function fixauth() {
       #TMUX gotta love it
-      eval $(tmux showenv | grep -vE "^-" | awk -F = '{print $1"=\""$2"\""}' | sed -e "s/^/export /")
+      eval $(tmux showenv | grep -vE "^-" | awk -F = '{print "export "$1"=\""$2"\""}')
     }
+    preexec_functions+='fixauth' #Run before each command
 fi
 

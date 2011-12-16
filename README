@@ -4,3 +4,21 @@ Fried Script Z .zshrc
 .zshrc.git - Optional Git Branch in Right Prompt
 .zshrc.shortpwd - Shorten Long PWD's by including ,.. in the middle of them.
 .zshrc.tmux - Examples of loading tmux, and fixing your SSH agent in tmux
+
+History> 
+This script is a re-write of my startup script for tcsh/csh, When I started at Facebook I decided it was time to get more modern with my choice of unix shell.
+This version should be a work-alike to my tcsh/csh startup. 
+
+My current environment consists of Linux and MacOS X, so these two will have the best support. 
+
+To update to the latest version you can use 'getzshrc [branch]' which will pull from the github stable branch by default, One important difference from my previous script
+is that this proccess does not automaticly source the new .zshrc file it offers you a chance to view a diff first and or revert. 
+
+use .zshrc.local for system specific configurations, these will not be wiped out by a 'getzshrc'
+
+TODO:
+    Look at custom completions in zsh, relying on some defaults right now
+
+Current Version 1.1.1b
+    Removed . from path, this is a security issue on shared hosts, you can add this to you .zshrc.local if it bothers you
+
