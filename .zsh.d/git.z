@@ -10,11 +10,6 @@ function get_git_info {
     fi
 }
 
-#Execute some pre-commands
-typeset -ga preexec_functions
-typeset -ga precmd_functions
-typeset -ga chpwd_functions
-
 #Allow substituions in the prompt
 setopt prompt_subst
 

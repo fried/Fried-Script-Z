@@ -1,9 +1,13 @@
 Fried Script Z .zshrc
 
 .zshrc - The Main ZSH Config file
-.zshrc.git - Optional Git Branch in Right Prompt
-.zshrc.shortpwd - Shorten Long PWD's by including ,.. in the middle of them.
-.zshrc.tmux - Examples of loading tmux, and fixing your SSH agent in tmux
+.zsh.d/ - Plugin Directory
+    git-promt.z - Optional Git Branch in Right Prompt
+    shortpwd.z - Shorten Long PWD's by including ,.. in the middle of them.
+    tmux.z - Examples of loading tmux, and fixing your SSH agent in tmux
+
+ All .z files in the plugin directory will be loaded after sourcing .zshrc.local unless you add the files name to a special array
+    .zshrc.local eq.  NO_FRIED_LOAD+='tmux' #This will not load the tmux.z script if it exists 
 
 History> 
 This script is a re-write of my startup script for tcsh/csh, When I started at Facebook I decided it was time to get more modern with my choice of unix shell.
@@ -19,6 +23,9 @@ use .zshrc.local for system specific configurations, these will not be wiped out
 TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
-Current Version 1.1.1b
+Current Version 1.2
+    Added support for automaticlly sourcing .z files in .zsh.d unless the name of the file is in the array $NO_FRIED_LOAD
+
+Version 1.1.1b
     Removed . from path, this is a security issue on shared hosts, you can add this to you .zshrc.local if it bothers you
 

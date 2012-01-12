@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.1.1b'
+zshrcversion='1.2'
 
 #set a good umask
 umask 022
@@ -265,5 +265,25 @@ if [[ $EDITOR == "vim" ]]; then
 fi
 alias cls='clear'
 alias stack='dirs -l'
+
+#Hooks for Plugins
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
+#List of plugins not to load
+NO_FRIED_LOAD=()
+
 #Load local configurations
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+#Load My Plugins
+setopt NULL_GLOB # Ingore no match
+foreach PLUGIN_FILE (~/.zsh.d/*.z)
+    unsetopt NULL_GLOB #Don't want plugins to get a strang option set
+    local PLUGIN=$(basename $PLUGIN_FILE .z)
+    #Unless indicated load the found plugin
+    [[ $NO_FRIED_LOAD =~ $PLUGIN ]] || source $PLUGIN_FILE
+end
+unsetopt NULL_GLOB
+unset PLUGIN_FILE
