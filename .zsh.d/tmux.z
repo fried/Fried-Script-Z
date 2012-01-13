@@ -1,12 +1,10 @@
-#
-# Never live with a stale agent sock again, well as long as you have a good agent sock to be found
-#
 
 #Where to store agent paths
 AGENTS_LOG=$(echo ~/.ssh/agents)
+
 thisHOST=$(hostname -s)
 
-#Load a Screen but only on my devserver
+#Load a TMUX Session but only on my devserver
 if [[ -z $TMUX && ! -f ~/notmux && $thisHOST == "dev3380" && $USER == "fried" ]]; then
    
    #Save the connecting auth sock for future generations :)
@@ -27,37 +25,53 @@ if [[ -z $TMUX && ! -f ~/notmux && $thisHOST == "dev3380" && $USER == "fried" ]]
 fi
 
 
-##Autofix ssh agent before each command
+# When forwarding a agent sock, if you open multiple sessions and close a newer
+# session you can cause a condition where your ssh-agent is invalid
+# To solve this we save every authsock, Later checking them to see if they work
+# So if the above case happens we just pull a good sock value from the list
+
+# Autofix ssh agent before each command
 if [[ -n $TMUX ]]; then
-    function fixauth() {
+    alias show_agents='cat $AGENTS_LOG'
+
+    function _FIND_GOOD_AGENTS() {
+        local result_var=$1
+        if [[ -f $AGENTS_LOG ]]; then
+            typeset agent
+            foreach agent ($(cat $AGENTS_LOG))
+                #Test the agent
+                env SSH_AUTH_SOCK=$agent ssh-add -l &>/dev/null
+                if [[ $? -eq 0 ]]; then
+                    #good save this agent
+                    eval ${result_var}+=$agent  #Return values
+                else
+                    #bad remove agent from log
+                    sed -i -e "\|^$agent$|d" $AGENTS_LOG
+                fi
+            end
+        fi
+    }
+
+    function _FIX_SSH_AGENT() {
+        #Clean up the agent log and grab a valid agent just incase
+        typeset -a good_agents
+        _FIND_GOOD_AGENTS good_agents
+
         #TMUX gotta love it
         eval $(tmux showenv | grep -vE "^-" | awk -F = '{print "export "$1"=\""$2"\""}' )
 
         #Fix the global env also
         tmux set-env -g SSH_AUTH_SOCK $SSH_AUTH_SOCK
 
-        #Test the resulting agent if bad try to find a valid one
+        #Test the resulting agent if bad use one we know is good
         ssh-add -l &>/dev/null
         if [[ $? -ne 0 ]]; then
-            if [[ -f $AGENTS_LOG ]]; then
-                local agent
-                foreach agent ($(cat $AGENTS_LOG)) 
-                    #Test the agent 
-                    env SSH_AUTH_SOCK=$agent ssh-add -l &>/dev/null
-                    if [[ $? -eq 0 ]]; then
-                        #good lets use this agent
-                        tmux set-env -g SSH_AUTH_SOCK $agent
-                        tmux set-env SSH_AUTH_SOCK $agent
-                        export SSH_AUTH_SOCK=$agent
-                        break
-                    else
-                        #bad remove agent from log
-                        sed -i -e "\|^$agent$|d" $AGENTS_LOG
-                    fi
-                end
-            fi
-
+           local agent=$good_agents[1] #Pull the oldest off the list of good agents
+           tmux set-env -g SSH_AUTH_SOCK $agent
+           tmux set-env SSH_AUTH_SOCK $agent
+           export SSH_AUTH_SOCK=$agent
         fi
     }
-    preexec_functions+='fixauth'
+    #Execute our agent fix before every command
+    preexec_functions+='_FIX_SSH_AGENT'
 fi
