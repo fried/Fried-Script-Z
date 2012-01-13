@@ -1,7 +1,8 @@
-#Short prompt function
-short-pwd() { 
-    #sed on osx used -E instead of -r
+#Allow substituions in the prompt
+setopt prompt_subst
+
+#Short prompt function (using ped instead of sed since sed arguments change too much per OS)
+short-pwd() {
     echo $PWD | ped 's/^((?:\/[^\/]+){3})(\/[^\/]+){2,}((?:\/[^\/]+){2})$/\1\/...\3/'
-    #echo $PWD | sed -re 's/^(\/[^/]+\/[^/]+\/)([^/]+\/){3,}([^/]+\/[^/]+)/\1...\/\3/'
 }
 PROMPT=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%{\e[31m%}:%{\e[32m%}$(short-pwd)%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '

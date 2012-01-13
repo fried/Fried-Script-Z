@@ -107,6 +107,7 @@ setopt NO_CHECK_JOBS #I know they are there don't remind me
 setopt NO_HUP #I put them in the background I wan't them to stay
 setopt NOTIFY #Let me know my job status
 setopt NO_BEEP
+setopt NO_NOMATCH #Do not warn me about no match just leave it
 
 #Make the enviroment more friendly to terminals
 bindkey -e #Select Emacs bindings

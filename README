@@ -25,6 +25,7 @@ TODO:
 
 Current Version 1.2
     Added support for automaticlly sourcing .z files in .zsh.d unless the name of the file is in the array $NO_FRIED_LOAD
+    Turning of NOMATCH zsh option by default. This behavior is more like my .cshrc
 
 Version 1.1.1b
     Removed . from path, this is a security issue on shared hosts, you can add this to you .zshrc.local if it bothers you

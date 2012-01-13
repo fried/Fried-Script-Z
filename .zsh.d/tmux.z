@@ -1,30 +1,63 @@
+#
+# Never live with a stale agent sock again, well as long as you have a good agent sock to be found
+#
 
-#This sets up a disconnected irc session if one doesn't exist
-#Then this loads the connecting session into tmux with exec
-#Switching between sessions is easy with "tmux switch-client -t <name>"
-#Load TMUX
-if [[ -z $TMUX ]]; then
+#Where to store agent paths
+AGENTS_LOG=$(echo ~/.ssh/agents)
+thisHOST=$(hostname -s)
+
+#Load a Screen but only on my devserver
+if [[ -z $TMUX && ! -f ~/notmux && $thisHOST == "dev3380" && $USER == "fried" ]]; then
+   
+   #Save the connecting auth sock for future generations :)
+   echo $SSH_AUTH_SOCK >>! $AGENTS_LOG
+
    #Start the Tmux Server
    tmux start-server
 
-   if [[ -z $(tmux list-sessions | grep irc) && $myhost == "iridium" ]]; then
+   if [[ -z $(tmux list-sessions | grep irc) ]]; then
       echo "IRC Session does not exist, attemplting to start"
-      tmux new-session -d -s irc -n "irssi" 'irssi' > /dev/null 2>&1
+      tmux new-session -d -s irc -n "irssi" 'irssi'
    fi
 
    #Start the fried session and attach to it
-   tmux new-session -d -s fried > /dev/null 2>&1
+   tmux has-session -t fried || tmux new-session -d -s fried
 
    exec tmux -2 attach-session -t fried
 fi
 
-#This is a nifty way to get enviroment varibles from your connecting session in a tmux session
-#Like SSH agent or kerberos cache
+
+##Autofix ssh agent before each command
 if [[ -n $TMUX ]]; then
     function fixauth() {
-      #TMUX gotta love it
-      eval $(tmux showenv | grep -vE "^-" | awk -F = '{print "export "$1"=\""$2"\""}')
-    }
-    preexec_functions+='fixauth' #Run before each command
-fi
+        #TMUX gotta love it
+        eval $(tmux showenv | grep -vE "^-" | awk -F = '{print "export "$1"=\""$2"\""}' )
 
+        #Fix the global env also
+        tmux set-env -g SSH_AUTH_SOCK $SSH_AUTH_SOCK
+
+        #Test the resulting agent if bad try to find a valid one
+        ssh-add -l &>/dev/null
+        if [[ $? -ne 0 ]]; then
+            if [[ -f $AGENTS_LOG ]]; then
+                local agent
+                foreach agent ($(cat $AGENTS_LOG)) 
+                    #Test the agent 
+                    env SSH_AUTH_SOCK=$agent ssh-add -l &>/dev/null
+                    if [[ $? -eq 0 ]]; then
+                        #good lets use this agent
+                        tmux set-env -g SSH_AUTH_SOCK $agent
+                        tmux set-env SSH_AUTH_SOCK $agent
+                        export SSH_AUTH_SOCK=$agent
+                        break
+                    else
+                        #bad remove agent from log
+                        sed -i -e "\|^$agent$|d" $AGENTS_LOG
+                    fi
+                end
+            fi
+
+        fi
+    }
+    preexec_functions+='fixauth'
+fi
