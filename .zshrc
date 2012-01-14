@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.2'
+zshrcversion='1.2a'
 
 #set a good umask
 umask 022
@@ -268,9 +268,9 @@ alias cls='clear'
 alias stack='dirs -l'
 
 #Hooks for Plugins
-typeset -ga preexec_functions
-typeset -ga precmd_functions
-typeset -ga chpwd_functions
+typeset -gUa preexec_functions
+typeset -gUa precmd_functions
+typeset -gUa chpwd_functions
 
 #List of plugins not to load
 NO_FRIED_LOAD=()

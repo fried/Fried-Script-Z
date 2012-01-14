@@ -24,6 +24,7 @@ TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
 Current Version 1.2
+   [a] Added -U on the typeset for all the function hooks, so hooks didn't get added multiple times after reloads
     Added support for automaticlly sourcing .z files in .zsh.d unless the name of the file is in the array $NO_FRIED_LOAD
     Turning of NOMATCH zsh option by default. This behavior is more like my .cshrc
 
