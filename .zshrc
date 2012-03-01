@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.2b'
+zshrcversion='1.2c'
 
 #set a good umask
 umask 022
@@ -279,6 +279,11 @@ NO_FRIED_LOAD=()
 
 #Load local configurations
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+#Load system local config
+hostname=$(hostname | cut -d . -f 1) # SunOS safe :)
+[[ -f ~/.zshrc.$hostname ]] && source ~/.zshrc.$hostname
+unset hostname
 
 #Load My Plugins
 setopt NULL_GLOB # Ingore no match
