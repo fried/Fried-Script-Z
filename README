@@ -24,6 +24,7 @@ TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
 Current Version 1.2
+   [d] Changed history to not update after every command should help with flaky NFS home directories
    [c] For NFS home environments load a file ~/.zshrc.<hostname> 
    [b] changed the way history file is writen, so that the log file is written after each commnad. 
        This saved history has been expanded to 10,000 and you can load history from other shells when you want with 'loadhistory'

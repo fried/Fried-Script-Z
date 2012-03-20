@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.2c'
+zshrcversion='1.2d'
 
 #set a good umask
 umask 022
@@ -82,13 +82,13 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 HISTFILE=$HOME/.zhistory
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
-#setopt APPEND_HISTORY #Append not replace
-setopt inc_append_history #Append after each command
+setopt APPEND_HISTORY #Append not replace
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY #Safer history expantion :)
 alias loadhistory='fc -RI' #Load lines from the history file
+alias dumphistory='fc -W' #Write out the history
 
 #Watch People :)
 #LOGCHECK=10
