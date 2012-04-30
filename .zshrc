@@ -9,7 +9,7 @@
 ################################################################################
 
 #zFried Script versionreload
-zshrcversion='1.2d'
+zshrcversion='1.2e'
 
 #set a good umask
 umask 022
@@ -251,7 +251,8 @@ fi
 #Perl to the rescue
 if [[ -n $(which perl) ]]; then
    alias ped='perl -i.bak -npe' #Why sed when you can ped
-   if (( perl -e "use LWP::Simple" &> /dev/null )); then
+   perl -e "use LWP::Simple" &> /dev/null
+   if [[ $? -eq - ]]; then
 	alias phttpcat='perl -MLWP::Simple -e "exit is_error getprint shift"'
 	pwget () {
 	    phttpcat $1 > $(basename $1)    

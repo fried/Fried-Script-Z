@@ -1,5 +1,8 @@
 Fried Script Z .zshrc
 
+grab a copy 
+    wget https://raw.github.com/fried/Fried-Script-Z/stable/.zshrc
+
 .zshrc - The Main ZSH Config file
 .zsh.d/ - Plugin Directory
     git-promt.z - Optional Git Branch in Right Prompt
@@ -24,6 +27,7 @@ TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
 Current Version 1.2
+   [e] fixed an issue with the pwget alias using incorrect syntax
    [d] Changed history to not update after every command should help with flaky NFS home directories
    [c] For NFS home environments load a file ~/.zshrc.<hostname> 
    [b] changed the way history file is writen, so that the log file is written after each commnad. 
