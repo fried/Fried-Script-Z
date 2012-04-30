@@ -205,7 +205,8 @@ getzshrc () {
 	pushd ~ #Move to home dir
         mv -f .zshrc .zshrc.old #Save the old one
         echo "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc"
-        if (( $gettool "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc" )); then
+        $gettool "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc"
+        if [[ $? -eq 0 ]]; then
 	    echo "Use 'zshcompare' to review changes (RECOMENDED)"
             alias zshcompare='diff -udB ~/.zshrc.old ~/.zshrc | less'
 	    echo "Use 'reload' to use these settings now"
@@ -252,7 +253,7 @@ fi
 if [[ -n $(which perl) ]]; then
    alias ped='perl -i.bak -npe' #Why sed when you can ped
    perl -e "use LWP::Simple" &> /dev/null
-   if [[ $? -eq - ]]; then
+   if [[ $? -eq 0 ]]; then
 	alias phttpcat='perl -MLWP::Simple -e "exit is_error getprint shift"'
 	pwget () {
 	    phttpcat $1 > $(basename $1)    
