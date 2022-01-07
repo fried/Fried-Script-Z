@@ -1,7 +1,7 @@
 Fried Script Z .zshrc
 
-grab a copy 
-    wget https://raw.github.com/fried/Fried-Script-Z/stable/.zshrc
+grab a copy
+    wget https://raw.githubusercontent.com/fried/Fried-Script-Z/stable/.zshrc
 
 .zshrc - The Main ZSH Config file
 .zsh.d/ - Plugin Directory
@@ -9,33 +9,53 @@ grab a copy
     shortpwd.z - Shorten Long PWD's by including ,.. in the middle of them.
     tmux.z - Examples of loading tmux, and fixing your SSH agent in tmux
 
- All .z files in the plugin directory will be loaded after sourcing .zshrc.local unless you add the files name to a special array
-    .zshrc.local eq.  NO_FRIED_LOAD+='tmux' #This will not load the tmux.z script if it exists 
+All .z files in the plugin directory will be loaded after sourcing .zshrc.local
+unless you add the files name to a special array in .zshrc.local
+   eq.
+      NO_FRIED_LOAD+='tmux' #This will not load the tmux.z script if it exists
 
-History> 
-This script is a re-write of my startup script for tcsh/csh, When I started at Facebook I decided it was time to get more modern with my choice of unix shell.
-This version should be a work-alike to my tcsh/csh startup. 
+History>
+This script is a re-write of my startup script for tcsh/csh, When I started at
+Facebook I decided it was time to get more modern with my choice of unix shell.
+This version should be a work-alike to my tcsh/csh startup.
 
-My current environment consists of Linux and MacOS X, so these two will have the best support. 
+My current environment consists of Linux and MacOS X, so these two will have
+the best support.
 
-To update to the latest version you can use 'getzshrc [branch]' which will pull from the github stable branch by default, One important difference from my previous script
-is that this proccess does not automaticly source the new .zshrc file it offers you a chance to view a diff first and or revert. 
+To update to the latest version you can use 'getzshrc [branch]' which will pull
+from the github stable branch by default, One important difference from my
+previous script is that this proccess does not automaticly source the new
+.zshrc file it offers you a chance to view a diff first and or revert.
 
-use .zshrc.local for system specific configurations, these will not be wiped out by a 'getzshrc'
+use .zshrc.local for system specific configurations, these will not be wiped
+out by a 'getzshrc'
 
 TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
-Current Version 1.2
+Current Version 1.3
+    Fixed path builder to have proper binary directory priorities
+    Fixed indentation issues and whitespace on line ends
+    Added vim tabstop definition
+    Fixed `ped` alias for Darwin
+    Updated URLs for changes from github.com
+
+Version 1.2
    [e] fixed an issue with the pwget alias using incorrect syntax
-   [d] Changed history to not update after every command should help with flaky NFS home directories
-   [c] For NFS home environments load a file ~/.zshrc.<hostname> 
-   [b] changed the way history file is writen, so that the log file is written after each commnad. 
-       This saved history has been expanded to 10,000 and you can load history from other shells when you want with 'loadhistory'
-   [a] Added -U on the typeset for all the function hooks, so hooks didn't get added multiple times after reloads
-    Added support for automaticlly sourcing .z files in .zsh.d unless the name of the file is in the array $NO_FRIED_LOAD
-    Turning of NOMATCH zsh option by default. This behavior is more like my .cshrc
+   [d] Changed history to not update after every command should help with flaky
+       NFS home directories
+   [c] For NFS home environments load a file ~/.zshrc.<hostname>
+   [b] changed the way history file is writen, so that the log file is written
+       after each commnad. This saved history has been expanded to 10,000 and
+       you can load history from other shells when you want with 'loadhistory'
+   [a] Added -U on the typeset for all the function hooks, so hooks didn't get
+       added multiple times after reloads
+    Added support for automaticlly sourcing .z files in .zsh.d unless the name
+     of the file is in the array $NO_FRIED_LOAD
+    Turning of NOMATCH zsh option by default. This behavior is more like my
+     .cshrc
 
 Version 1.1.1b
-    Removed . from path, this is a security issue on shared hosts, you can add this to you .zshrc.local if it bothers you
+    Removed . from path, this is a security issue on shared hosts, you can add
+    this to you .zshrc.local if it bothers you
 
