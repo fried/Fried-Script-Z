@@ -1,26 +1,28 @@
-################################################################################
-# Fried Script Z by Jason Fried <zshrc[at]jasonfried.info>    Standard Distro  #
-# INFO availible at http://jasonfried.info/friedscript/                        #
-# Copyright (c) 2011, Jason Fried.   Simplified BSD License                    #
-# License Statement: http://jasonfried.info/friedscript/license.html           #
-################################################################################
-# !!!DO NOT MAKE CHANGES TO THIS FILE THEY WILL BE LOST AFTER A 'getzshrc'!!!  #
-#        !!! Make ANY CHANGES YOU WISH TO KEEP IN '.zshrc.local' !!!           #
-################################################################################
+###############################################################################
+# Fried Script Z by Jason Fried <zshrc[at]jasonfried.info>    Standard Distro #
+# INFO availible at https://github.com/fried/Fried-Script-Z.git               #
+# Copyright (c) 2022, Jason Fried. All rights reserved.  BSD 2-Clause License #
+# License Stmt: https://github.com/fried/Fried-Script-Z/blob/master/LICENSE   #
+###############################################################################
+# !!!DO NOT MAKE CHANGES TO THIS FILE THEY WILL BE LOST AFTER A 'getzshrc'!!! #
+#        !!! Make ANY CHANGES YOU WISH TO KEEP IN '.zshrc.local' !!!          #
+###############################################################################
 
 #zFried Script versionreload
-zshrcversion='1.2e'
+zshrcversion='1.3'
 
 #set a good umask
 umask 022
 
 #Everything beyond this point is interactive shell
 [[ -z "$prompt" ]] && return
+[[ "$TERM" == "nuclide" ]] && return
 
 #clean the env 
 unalias -m "*" #Do not force alias on me buddy
 
-#Make sure this alias gets created, before any scripting errors can possibly prevent it.
+#Make sure this alias gets created, before any scripting errors can possibly 
+#prevent it.
 alias reload='source ~/.zshrc'
 
 #Remove Duplicates from Certain Arrays Automaticly
@@ -28,15 +30,26 @@ typeset -U path cdpath fpath manpath
 
 #emergency Path if non is set
 if [[ -z "$path" ]]; then
-    path=(/bin /usr/bin);
+    path=(/usr/bin /bin);
 fi
 
 #Build the path, if the path exists
 dpath=()
-foreach dir ( $path /sbin /usr/sbin /usr/local/sbin /bin /usr/bin /usr/local/bin /usr/games /usr/X11R6/bin /usr/kerberos/bin /opt/local/bin /opt/local/sbin  ~/ ~/bin ~/tools )
-   if [[ -d $dir ]]; then
-      dpath+=$dir
-   fi
+# Build out the possible paths for binaries. 
+foreach suffix ( bin sbin )
+    foreach dir ( ~/ /usr/local/ /usr/ / /opt/ )
+        if [[ -d $dir$suffix ]]; then
+            dpath+=$dir$suffix
+        fi
+    end
+    unset dir
+end
+unset suffix
+# Add some other things and check for existence of the provided $PATH
+foreach dir ( /usr/games /usr/X11R6/bin /usr/kerberos/bin ~/tools $path )
+    if [[ -d $dir ]]; then
+        dpath+=$dir
+    fi
 end
 path=($dpath)
 export PATH
@@ -47,15 +60,15 @@ unset dpath
 
 #If Vim is there lets use it
 if [[ -n $(which vim) ]]; then
-   export EDITOR=vim
+    export EDITOR=vim
 else
-   export EDITOR=vi
+    export EDITOR=vi
 fi
 
 if [[ -n $(which less) ]]; then
-   export PAGER=less
+    export PAGER=less
 else
-   export PAGER=more
+    export PAGER=more
 fi
 
 export BLOCKSIZE=1024
@@ -69,6 +82,7 @@ export LS_COLORS='no=00:fi=00:di=00;36:ln=00;35:pi=01;34:do=01;34:bd=01;33:cd=00
 #Set some zsh completion Options
 autoload -U compinit
 compinit -C
+#bashcompinit
 #Complete my dot files please
 _comp_options+=(globdots)
 zmodload -i zsh/complist
@@ -138,37 +152,37 @@ bindkey ' ' magic-space #On space expand history vars
 echo $(command date '+%a %h %d %r %Z %Y')
 echo "Interactive \e[0;1;34mLogin\e[0m, Fried Script Z $zshrcversion."
 if [[ $SHLVL -eq 1 || ( -n $TMUX && $SHLVL -eq 2 ) ]]; then #Only post this in the top most shell
-   echo "Terminal type set to \e[1;33m$TERM\e[0m on $TTY."
-   echo "Using \e[31mzsh\e[0m as shell with \e[31m$uname\e[0m instructions."
+    echo "Terminal type set to \e[1;33m$TERM\e[0m on $TTY."
+    echo "Using \e[31mzsh\e[0m as shell with \e[31m$uname\e[0m instructions."
 else
-   echo "Fried Script - Current Shell Depth ${SHLVL}"
+    echo "Fried Script - Current Shell Depth ${SHLVL}"
 fi
 #Set a colorful prompt that identifies the user and current host. 
 PROMPT=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%{\e[31m%}:%{\e[32m%}%/%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '
 RPROMPT=
 
 altprompt () {
-  echo "Reload to undo. Enjoy"
-  PROMPT=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '
-  RPROMPT+=$'%{\e[0;1;34m%}[%{\e[32m%}%/%{\e[34m%}]%{\e[0m%}'  
+    echo "Reload to undo. Enjoy"
+    PROMPT=$'%{\e[0;1;34m%}[%{\e[31m%}%n%{\e[34m%}@%{\e[33m%}%m%{\e[34m%}]%(!.%{\e[31m%}>.%{\e[0m%}>)%{\e[0m%} '
+    RPROMPT+=$'%{\e[0;1;34m%}[%{\e[32m%}%/%{\e[34m%}]%{\e[0m%}'  
 }
 
 #Change the title on directory changes
 set_xterm_title () {
-   if [[ $TERM == *xterm* ]]; then
-      print -Pn "\e]0;$@\007"
-   fi
+    if [[ $TERM == *xterm* ]]; then
+        print -Pn "\e]0;$@\007"
+    fi
 }
 
 set_screen_title () {
-   [[ -n $STY ]] && print -Pn "\ek$@\e\\"
+    [[ -n $STY ]] && print -Pn "\ek$@\e\\"
 }
 
 chpwd () {
     [[ -t 1 ]] || return
     if [[ $TERM == *xterm* ]]; then
-       set_xterm_title "%n@%M : %/       ::        Fried Script Z ${zshrcversion}"
-       [[ -n $STY ]] && set_screen_title "%n@%m:%/"
+        set_xterm_title "%n@%M : %/       ::        Fried Script Z ${zshrcversion}"
+        [[ -n $STY ]] && set_screen_title "%n@%m:%/"
     fi
 }
 chpwd #Set it 
@@ -176,12 +190,12 @@ chpwd #Set it
 #OS Based Alias and Settings
 case "$uname" in
     (Darwin|FreeBSD)
-   	export LSCOLORS=gxfxExExcxDxdxbxBxhxdx #bsd & darwin
+        export LSCOLORS=gxfxExExcxDxdxbxBxhxdx #bsd & darwin
         export CLICOLOR
-	;& #Fall Through for more matches :)
+        ;& #Fall Through for more matches :)
     Darwin)
-	alias ls='ls -GFCah'
-	gettool=(curl -O) #Arguments Passed
+        alias ls='ls -GFCah'
+        gettool=(curl -O) #Arguments Passed
         ;;
     Linux)
         alias ls='ls --color=auto -FhCa'
@@ -189,37 +203,38 @@ case "$uname" in
         ;;
     FreeBSD)
         alias ls='ls -FCGogah'
-	gettool='fetch'
+        gettool='fetch'
         ;;
     *)
-	gettool='NONE'
+        getttool='NONE'
         ;;
 esac
 
 #Get New Versions of this script
 #Safer updates
 getzshrc () {
-   branch=${1=stable} #Allow the picking of a branch :) 
-   if [[ $gettool != "NONE" ]]; then
-	setopt NO_PUSHD_IGNORE_DUPS #Suppress error if we start out in home
-	pushd ~ #Move to home dir
+    URL='https://raw.githubusercontent.com/fried/Fried-Script-Z/'
+    branch=${1=stable} #Allow the picking of a branch :) 
+    if [[ $gettool != "NONE" ]]; then
+        setopt NO_PUSHD_IGNORE_DUPS #Suppress error if we start out in home
+        pushd ~ #Move to home dir
         mv -f .zshrc .zshrc.old #Save the old one
-        echo "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc"
-        $gettool "https://raw.github.com/fried/Fried-Script-Z/${branch}/.zshrc"
+        echo "$URL${branch}/.zshrc"
+        $gettool "$URL${branch}/.zshrc"
         if [[ $? -eq 0 ]]; then
-	    echo "Use 'zshcompare' to review changes (RECOMENDED)"
+            echo "Use 'zshcompare' to review changes (RECOMENDED)"
             alias zshcompare='diff -udB ~/.zshrc.old ~/.zshrc | less'
-	    echo "Use 'reload' to use these settings now"
+            echo "Use 'reload' to use these settings now"
             echo "Use 'revert' to use old version"
             alias revert='mv -f ~/.zshrc.old ~/.zshrc&&unalias revert'
- 	    popd #go back to what we were doing
-	else
-	    mv -f .zshrc.old .zshrc #Restore the old, we failed
-	fi
-	setopt PUSHD_IGNORE_DUPS #Restore behavior 
-   else
-	echo "Disabled, lacking a file fetch utility for your OS"
-   fi
+            popd #go back to what we were doing
+        else
+            mv -f .zshrc.old .zshrc #Restore the old, we failed
+        fi
+        setopt PUSHD_IGNORE_DUPS #Restore behavior 
+    else
+        echo "Disabled, lacking a file fetch utility for your OS"
+    fi
 }
 
 
@@ -235,10 +250,9 @@ alias grep='grep -i'
 #Grep out my procs
 psgrep () { ps auxww | grep $@ }
 alias mildate='command date'
-date () { command date $@ "+%a %h %d %r %Z %Y" }
 
 if [[ -n $(which bc) ]]; then # I seem to use this alot, and it rots my brain
-  calc() { echo $@ | bc -l }
+   calc() { echo $@ | bc -l }
 fi
 
 #Forward my ssh agent always
@@ -251,22 +265,26 @@ fi
 
 #Perl to the rescue
 if [[ -n $(which perl) ]]; then
-   alias ped='perl -i.bak -npe' #Why sed when you can ped
-   perl -e "use LWP::Simple" &> /dev/null
-   if [[ $? -eq 0 ]]; then
-	alias phttpcat='perl -MLWP::Simple -e "exit is_error getprint shift"'
-	pwget () {
-	    phttpcat $1 > $(basename $1)    
-	}
+    if [[ $uname == "Darwin" ]]; then
+        alias ped='perl -npe'
+    else
+        alias ped='perl -i.bak -npe' #Why sed when you can ped
+    fi
+    perl -e "use LWP::Simple" &> /dev/null
+    if [[ $? -eq 0 ]]; then
+        alias phttpcat='perl -MLWP::Simple -e "exit is_error getprint shift"'
+        pwget () {
+            phttpcat $1 > $(basename $1)    
+        }
         if [[ $gettool == "NONE" ]]; then
-	    gettool='pwget' #Perl to save the day
-	fi
-   fi   
+            gettool='pwget' #Perl to save the day
+        fi
+    fi   
 fi
 
-alias become 'sudo -s -H -u'
+alias become='sudo -s -H -u'
 if [[ $EDITOR == "vim" ]]; then
-  alias vi='vim'
+    alias vi='vim'
 fi
 alias cls='clear'
 alias stack='dirs -l'
@@ -297,3 +315,8 @@ foreach PLUGIN_FILE (~/.zsh.d/*.z)
 end
 unsetopt NULL_GLOB
 unset PLUGIN_FILE
+###############################################################################
+# vim: set tabstop=4:softtabstop=4:shiftwidth=4:expandtab                     #
+#                       THIS IS THE END OF Fried Script Z                     #
+###############################################################################
+
