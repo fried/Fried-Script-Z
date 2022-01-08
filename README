@@ -33,12 +33,13 @@ out by a 'getzshrc'
 TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
-Current Version 1.3
+Current Version 22.01
     Fixed path builder to have proper binary directory priorities
     Fixed indentation issues and whitespace on line ends
     Added vim tabstop definition
     Fixed `ped` alias for Darwin
     Updated URLs for changes from github.com
+    Since I havent updated in 10 years I moved to date based versioning :P
 
 Version 1.2
    [e] fixed an issue with the pwget alias using incorrect syntax

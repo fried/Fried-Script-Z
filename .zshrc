@@ -9,7 +9,7 @@
 ###############################################################################
 
 #zFried Script versionreload
-zshrcversion='1.3'
+zshrcversion='22.01'
 
 #set a good umask
 umask 022
