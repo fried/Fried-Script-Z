@@ -9,7 +9,7 @@
 ###############################################################################
 
 #zFried Script versionreload
-zshrcversion='22.01'
+zshrcversion='23.07'
 
 #set a good umask
 umask 022
@@ -97,6 +97,7 @@ HISTFILE=$HOME/.zhistory
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 setopt APPEND_HISTORY #Append not replace
+setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
@@ -319,4 +320,3 @@ unset PLUGIN_FILE
 # vim: set tabstop=4:softtabstop=4:shiftwidth=4:expandtab                     #
 #                       THIS IS THE END OF Fried Script Z                     #
 ###############################################################################
-
