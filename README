@@ -33,7 +33,14 @@ out by a 'getzshrc'
 TODO:
     Look at custom completions in zsh, relying on some defaults right now
 
-Current Version 22.01
+Current Version 26.06
+    Fixed zshcompare alias direction
+    Fixed mildate to accept date arguments and use 24hr time
+
+Version 23.07
+    Enabled SHARE_HISTORY
+
+Version 22.01
     Fixed path builder to have proper binary directory priorities
     Fixed indentation issues and whitespace on line ends
     Added vim tabstop definition
