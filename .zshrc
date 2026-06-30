@@ -9,7 +9,7 @@
 ###############################################################################
 
 #zFried Script versionreload
-zshrcversion='23.07'
+zshrcversion='26.06'
 
 #set a good umask
 umask 022
@@ -150,7 +150,7 @@ bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 bindkey ' ' magic-space #On space expand history vars
 
-echo $(command date '+%a %h %d %r %Z %Y')
+echo $(command date '+%a %h %d %R:%S %Z %Y')
 echo "Interactive \e[0;1;34mLogin\e[0m, Fried Script Z $zshrcversion."
 if [[ $SHLVL -eq 1 || ( -n $TMUX && $SHLVL -eq 2 ) ]]; then #Only post this in the top most shell
     echo "Terminal type set to \e[1;33m$TERM\e[0m on $TTY."
@@ -250,7 +250,7 @@ alias cp='cp -i'
 alias grep='grep -i'
 #Grep out my procs
 psgrep () { ps auxww | grep $@ }
-alias mildate='command date'
+mildate() { command date $@ "+%a %h %d %R:%S %Z %Y" }
 
 if [[ -n $(which bc) ]]; then # I seem to use this alot, and it rots my brain
    calc() { echo $@ | bc -l }
