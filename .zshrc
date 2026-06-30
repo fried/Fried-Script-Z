@@ -224,7 +224,7 @@ getzshrc () {
         $gettool "$URL${branch}/.zshrc"
         if [[ $? -eq 0 ]]; then
             echo "Use 'zshcompare' to review changes (RECOMENDED)"
-            alias zshcompare='diff -udB ~/.zshrc.old ~/.zshrc | less'
+            alias zshcompare='diff -udB ~.zshrc ~/.zshrc.old | less'
             echo "Use 'reload' to use these settings now"
             echo "Use 'revert' to use old version"
             alias revert='mv -f ~/.zshrc.old ~/.zshrc&&unalias revert'
